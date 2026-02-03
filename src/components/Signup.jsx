@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Signup({ isOpen, onClose }) {
+export default function Signup({ onClose }) {
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
@@ -54,8 +54,6 @@ export default function Signup({ isOpen, onClose }) {
       onClose();
     }
   };
-
-  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50 px-3" onClick={onClose}>

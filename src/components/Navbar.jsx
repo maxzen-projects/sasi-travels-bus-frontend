@@ -4,6 +4,8 @@ import { MdLocalOffer, MdHelp, MdCancel, MdSearch, MdLanguage, MdNotifications }
 import Login from "./Login";
 import Signup from "./Signup";
 import LanguageSelector from "./LanguageSelector";
+import { useLanguage } from "./context/LanguageContext";
+import { useAuth } from "./context/AuthContext";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -11,7 +13,8 @@ export default function Navbar() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState({ code: "en", name: "English" });
+  const { language, changeLanguage, t } = useLanguage();
+  const { user, logout } = useAuth();
 
   return (
     <nav className="bg-white shadow-sm px-4 md:px-16 py-3 flex items-center justify-between relative">
@@ -23,8 +26,8 @@ export default function Navbar() {
         </div>
 
         <ul className="hidden md:flex gap-8 text-gray-700 font-medium">
-          <li className="cursor-pointer hover:text-red-600">Things to Do</li>
-          <li className="cursor-pointer hover:text-red-600">Help</li>
+          <li className="cursor-pointer hover:text-red-600">{t("thingsToDo")}</li>
+          <li className="cursor-pointer hover:text-red-600">{t("help")}</li>
         </ul>
       </div>
 
@@ -65,15 +68,30 @@ export default function Navbar() {
 
               {/* Login & Signup */}
               <div className="p-3 border-b">
-                <button
-                  onClick={() => {
-                    setIsLoginOpen(true);
-                    setAccountOpen(false);
-                  }}
-                  className="w-full bg-red-600 text-white py-2 rounded-md mb-2"
-                >
-                  Login/Signup
-                </button>
+                {!user ? (
+                  <button
+                    onClick={() => {
+                      setIsLoginOpen(true);
+                      setAccountOpen(false);
+                    }}
+                    className="w-full bg-red-600 text-white py-2 rounded-md mb-2"
+                  >
+                    {t("loginSignup")}
+                  </button>
+                ) : (
+                  <div className="text-center">
+                    <p className="font-bold text-gray-800 mb-2">Hi, {user?.name || user?.mobile || user?.sub?.split('@')[0]}</p>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setAccountOpen(false);
+                      }}
+                      className="w-full border border-gray-300 text-gray-700 py-2 rounded-md hover:bg-gray-50"
+                    >
+                      {t("logout")}
+                    </button>
+                  </div>
+                )}
 
                 {/* <button
                   onClick={() => {
@@ -107,7 +125,7 @@ export default function Navbar() {
                     setAccountOpen(false);
                   }}
                 >
-                  <MdLanguage /> Language ({selectedLanguage.name})
+                  <MdLanguage /> Language ({language.name})
                 </li>
                 <li className="flex items-center gap-2 p-3 hover:bg-gray-100 cursor-pointer">
                   <MdNotifications /> Notifications
@@ -145,13 +163,14 @@ export default function Navbar() {
       )}
 
       {/* Login Modal */}
-      <Login isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
-      <Signup isOpen={isSignupOpen} onClose={() => setIsSignupOpen(false)} />
+      {isLoginOpen && <Login onClose={() => setIsLoginOpen(false)} />}
+      {isSignupOpen && <Signup onClose={() => setIsSignupOpen(false)} />}
+
       <LanguageSelector
         isOpen={isLanguageOpen}
         onClose={() => setIsLanguageOpen(false)}
-        onSelect={setSelectedLanguage}
-        selected={selectedLanguage}
+        onSelect={changeLanguage}
+        selected={language}
       />
     </nav>
   );

@@ -3,10 +3,13 @@ import Navbar from "./Navbar";
 import SearchForm from "./SearchForm";
 import Features from "./Features";
 import PopularRoutes from "./PopularRoutes";
-import travelBg from "../assets/travel bg.webp";
+import travelBg from "../assets/travel-bg.webp";
+import { useLanguage } from "./context/LanguageContext";
 // import Footer from "./Footer"; // The Footer.jsx file was not provided in the context.
 
 export default function Home() {
+  const { t } = useLanguage();
+
   return (
     <div>
       <Navbar />
@@ -23,8 +26,8 @@ export default function Home() {
 
   {/* Overlay Text */}
   <div className="absolute inset-0 flex flex-col justify-center items-center text-white bg-black/40">
-    <h1 className="text-4xl font-bold">Book Your Bus Tickets Easily</h1>
-    <p className="mt-3 text-lg">Fast, Safe and Reliable Bus Booking</p>
+    <h1 className="text-4xl font-bold">{t("bookYourBusTickets")}</h1>
+    <p className="mt-3 text-lg">{t("fastSafeReliable")}</p>
   </div>
 
 </section>

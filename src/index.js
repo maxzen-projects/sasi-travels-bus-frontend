@@ -1,13 +1,20 @@
 import React from 'react';
+import './i18n';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { LanguageProvider } from './components/context/LanguageContext';
+import { AuthProvider } from './components/context/AuthContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <LanguageProvider>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </LanguageProvider>
   </React.StrictMode>
 );
 

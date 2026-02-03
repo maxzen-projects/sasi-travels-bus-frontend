@@ -1,7 +1,9 @@
-import { useState } from "react";
-import { FaTimes, FaChevronDown, FaGoogle, FaCheckCircle } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import { FaTimes, FaChevronDown, FaGoogle, FaCheckCircle, FaArrowLeft } from "react-icons/fa";
+import { useAuth } from "./context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
-export default function Login({ isOpen, onClose }) {
+export default function Login({ onClose }) {
 
   const countryCodes = [
     { code: "+91", name: "India", flag: "🇮🇳" },
@@ -16,10 +18,118 @@ export default function Login({ isOpen, onClose }) {
   const [selectedCountry, setSelectedCountry] = useState(countryCodes[0]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [captchaVerified, setCaptchaVerified] = useState(false);
+  const [showOtpInput, setShowOtpInput] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [resendTimer, setResendTimer] = useState(0);
+  const [isResendDisabled, setIsResendDisabled] = useState(false);
+  const [otpError, setOtpError] = useState("");
+  const [apiError, setApiError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const isMobileValid = /^[0-9]{10}$/.test(mobile);
+  const isOtpValid = /^[0-9]{6}$/.test(otp);
 
-  if (!isOpen) return null;
+  // Timer logic
+  useEffect(() => {
+    let interval;
+    if (isResendDisabled && resendTimer > 0) {
+      interval = setInterval(() => {
+        setResendTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+    } else if (resendTimer === 0) {
+      setIsResendDisabled(false);
+    }
+    return () => clearInterval(interval);
+  }, [isResendDisabled, resendTimer]);
+
+  const handleGenerateOtp = async () => {
+    setLoading(true);
+    setApiError("");
+    try {
+      const fullPhoneNumber = `${selectedCountry.code}${mobile}`;
+      // The backend expects a JSON body. The validation on the backend needs to be fixed to accept full phone numbers.
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/register/phone/send-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: fullPhoneNumber })
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: 'Failed to send OTP. Please try again.' }));
+        throw new Error(errorData.message);
+      }
+
+      setShowOtpInput(true);
+      setIsResendDisabled(true);
+      setResendTimer(30);
+    } catch (error) {
+      setApiError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    if (isResendDisabled || loading) return;
+    setLoading(true);
+    setOtpError("");
+    try {
+      const fullPhoneNumber = `${selectedCountry.code}${mobile}`;
+      await fetch(`${process.env.REACT_APP_API_URL}/api/auth/register/phone/send-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: fullPhoneNumber })
+      });
+      setIsResendDisabled(true);
+      setResendTimer(30); // Restart the timer
+    } catch (error) {
+      setOtpError("Failed to resend OTP. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    setLoading(true);
+    setOtpError("");
+    try {
+      const fullPhoneNumber = `${selectedCountry.code}${mobile}`;
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/register/phone/verify-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: fullPhoneNumber, otp: otp })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: 'Invalid OTP. Please try again.' }));
+        throw new Error(errorData.message);
+      }
+
+      const token = await response.text();
+      localStorage.setItem('jwtToken', token);
+
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        const userData = JSON.parse(jsonPayload);
+        login(userData);
+      } catch (error) {
+        login({ mobile: fullPhoneNumber });
+      }
+      
+      onClose();
+      navigate("/");
+    } catch (error) {
+      setOtpError(error.message || "Invalid OTP. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 px-3" onClick={onClose}>
@@ -27,10 +137,12 @@ export default function Login({ isOpen, onClose }) {
       <div className="bg-white w-full max-w-[500px] rounded-2xl shadow-xl relative p-5 sm:p-6" onClick={(e) => e.stopPropagation()}>
 
         {/* Close Button */}
-        <button onClick={onClose} className="absolute top-3 right-3 bg-gray-100 p-2 rounded-full hover:bg-red-100">
+        <button onClick={onClose} className="absolute top-3 right-3 bg-gray-100 p-2 rounded-full hover:bg-red-100 z-10">
           <FaTimes />
         </button>
 
+        {!showOtpInput ? (
+          <>
         <p className="text-xs sm:text-sm text-gray-600">Login to get exciting offers</p>
         <h2 className="text-lg sm:text-2xl font-bold mt-2">What's your mobile number?</h2>
 
@@ -71,8 +183,13 @@ export default function Login({ isOpen, onClose }) {
             type="text"
             placeholder="Mobile number"
             value={mobile}
-            onChange={(e) => setMobile(e.target.value)}
-            className="flex-1 px-3 py-2 sm:py-3 outline-none text-sm sm:text-base"
+            onChange={(e) => {
+              const numericValue = e.target.value.replace(/[^0-9]/g, "");
+              setMobile(numericValue);
+            }}
+            className="flex-1 px-3 py-2 sm:py-3 outline-none text-sm sm:text-base font-semibold"
+            maxLength={10}
+            inputMode="numeric"
           />
         </div>
 
@@ -92,17 +209,19 @@ export default function Login({ isOpen, onClose }) {
           <span className="ml-auto text-xs text-gray-500">reCAPTCHA</span>
         </div>
 
+        {apiError && <p className="text-red-500 text-xs mt-2 text-center">{apiError}</p>}
+
         {/* Generate OTP */}
         <button
-          disabled={!isMobileValid || !captchaVerified}
+          onClick={handleGenerateOtp}
+          disabled={!isMobileValid || !captchaVerified || loading}
           className={`w-full py-2.5 sm:py-3 rounded-full mt-4 font-semibold text-white text-sm sm:text-base
           ${
-            isMobileValid && captchaVerified
+            isMobileValid && captchaVerified && !loading
               ? "bg-red-600 hover:bg-red-700"
-              : "bg-gray-300 cursor-not-allowed"
-          }`}
+              : "bg-gray-300 cursor-not-allowed" }`}
         >
-          Generate OTP
+          {loading ? "Sending..." : "Generate OTP"}
         </button>
 
         {/* OR Divider */}
@@ -113,7 +232,10 @@ export default function Login({ isOpen, onClose }) {
         </div>
 
         {/* Google Login */}
-        <button className="flex items-center justify-center gap-2 border rounded-lg py-2.5 w-full hover:bg-gray-50 text-sm sm:text-base">
+        <button 
+          onClick={() => window.location.href=`${process.env.REACT_APP_API_URL}/oauth2/authorization/google`}
+          className="flex items-center justify-center gap-2 border rounded-lg py-2.5 w-full hover:bg-gray-50 text-sm sm:text-base"
+        >
           <FaGoogle className="text-blue-500 text-lg" />
           <span className="font-medium">Sign in with Google</span>
         </button>
@@ -123,6 +245,64 @@ export default function Login({ isOpen, onClose }) {
           <span className="text-blue-600 cursor-pointer">Terms & Conditions</span> &{" "}
           <span className="text-blue-600 cursor-pointer">Privacy Policy</span>
         </p>
+          </>
+        ) : (
+          <>
+            {/* Back Button */}
+            <button 
+              onClick={() => {
+                setShowOtpInput(false);
+                setOtpError(""); // Clear error on going back
+              }} 
+              className="absolute top-3 left-3 bg-gray-100 p-2 rounded-full hover:bg-gray-200"
+            >
+              <FaArrowLeft />
+            </button>
+
+            <div className="mt-8">
+              <h2 className="text-lg sm:text-2xl font-bold text-center">Verify OTP</h2>
+              <p className="text-sm text-gray-600 text-center mt-2">
+                OTP sent to <span className="font-semibold">{selectedCountry.code} {mobile}</span>
+              </p>
+
+              <input
+                type="text"
+                placeholder="Enter OTP"
+                value={otp}
+                onChange={(e) => {
+                  const numericValue = e.target.value.replace(/[^0-9]/g, "");
+                  setOtp(numericValue);
+                  if (otpError) {
+                    setOtpError("");
+                  }
+                }}
+                className="w-full border rounded-lg px-4 py-3 mt-6 outline-none text-center text-lg tracking-widest focus:ring-2 focus:ring-red-500 font-semibold"
+                maxLength={6}
+                inputMode="numeric"
+              />
+              {otpError && <p className="text-red-500 text-xs mt-2 text-center">{otpError}</p>}
+
+              <button
+                onClick={handleVerifyOtp}
+                disabled={!isOtpValid || loading}
+                className={`w-full py-3 rounded-full mt-6 font-semibold transition ${isOtpValid && !loading ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-gray-300 cursor-not-allowed text-white'}`}
+              >
+                {loading ? "Verifying..." : "Verify OTP"}
+              </button>
+
+              <p
+                onClick={handleResendOtp}
+                className={`text-xs text-center mt-4 ${
+                  isResendDisabled ? "text-gray-500 cursor-not-allowed" : "text-red-600 cursor-pointer hover:text-red-700"
+                }`}
+              >
+                {isResendDisabled
+                  ? `Resend OTP in ${resendTimer}s`
+                  : "Resend OTP"}
+              </p>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

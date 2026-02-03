@@ -1,4 +1,5 @@
 // c:\Users\lokes\Downloads\mah\src\components\LanguageSelector.jsx
+import { useLanguage } from "./context/LanguageContext";
 
 const languages = [
   { code: "en", name: "English" },
@@ -13,6 +14,8 @@ const languages = [
 ];
 
 export default function LanguageSelector({ isOpen, onClose, onSelect, selected }) {
+  const { t } = useLanguage();
+
   if (!isOpen) return null;
 
   return (
@@ -25,7 +28,7 @@ export default function LanguageSelector({ isOpen, onClose, onSelect, selected }
           &times;
         </button>
 
-        <h2 className="text-xl font-bold text-gray-800 mb-4">Select Language</h2>
+        <h2 className="text-xl font-bold text-gray-800 mb-4">{t("selectLanguage")}</h2>
 
         <div className="grid grid-cols-2 gap-3">
           {languages.map((lang) => (
