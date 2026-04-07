@@ -36,3 +36,23 @@
     transform: rotate(360deg);
   }
 }
+/* 🌈 Moving Gradient */
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-gradientMove {
+  animation: gradientMove 4s linear infinite;
+}
+
+/* ✨ Shine Sweep */
+@keyframes shineMove {
+  0% { left: -100%; }
+  100% { left: 120%; }
+}
+
+.group:hover .shine {
+  animation: shineMove 0.8s ease forwards;
+}

@@ -41,3 +41,67 @@
   from { left: -40px; }
   to { left: 260px; }
 }
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+/* TEXT SLIDE ANIMATION */
+@keyframes slideInRight {
+  0% {
+    transform: translateX(120px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.slide-in-right {
+  animation: slideInRight 1s ease-out forwards;
+}
+
+/* TYPING EFFECT */
+
+.typing-text {
+  overflow: hidden;
+  border-right: 3px solid #2563eb;
+  white-space: nowrap;
+  animation: typing 3s steps(30) forwards, blink 0.7s infinite;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
+}
+/* SLIDE FROM BOTTOM */
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(120px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.9s ease-out forwards;
+}
+
