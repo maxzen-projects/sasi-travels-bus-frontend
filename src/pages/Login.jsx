@@ -72,7 +72,7 @@ export default function Login({ onClose }) {
       <div className="bg-white w-full max-w-[500px] rounded-2xl shadow-xl relative p-5 sm:p-6" onClick={(e) => e.stopPropagation()}>
 
         {/* Close Button */}
-        <button onClick={onClose} className="absolute top-3 right-3 bg-gray-100 p-2 rounded-full hover:bg-red-100 z-10">
+        <button onClick={onClose} className="absolute top-3 right-3 bg-gray-100 p-2 rounded-full hover:bg-blue-100 z-10">
           <FaTimes />
         </button>
 
@@ -207,16 +207,16 @@ export default function Login({ onClose }) {
                     setOtpError("");
                   }
                 }}
-                className="w-full border rounded-lg px-4 py-3 mt-6 outline-none text-center text-lg tracking-widest focus:ring-2 focus:ring-red-500 font-semibold"
+                className="w-full border rounded-lg px-4 py-3 mt-6 outline-none text-center text-lg tracking-widest focus:ring-2 focus:ring-blue-500 font-semibold"
                 maxLength={6}
                 inputMode="numeric"
               />
-              {otpError && <p className="text-red-500 text-xs mt-2 text-center">{otpError}</p>}
+              {otpError && <p className="text-blue-500 text-xs mt-2 text-center">{otpError}</p>}
 
               <button
                 onClick={handleVerifyOtp}
                 disabled={!isOtpValid}
-                className={`w-full py-3 rounded-full mt-6 font-semibold transition ${isOtpValid ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-gray-300 cursor-not-allowed text-white'}`}
+                className={`w-full py-3 rounded-full mt-6 font-semibold transition ${isOtpValid ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 cursor-not-allowed text-white'}`}
               >
                 Verify OTP
               </button>
@@ -224,7 +224,7 @@ export default function Login({ onClose }) {
               <p
                 onClick={handleResendOtp}
                 className={`text-xs text-center mt-4 ${
-                  isResendDisabled ? "text-gray-500" : "text-red-600 cursor-pointer hover:text-red-700"
+                  isResendDisabled ? "text-gray-500" : "text-blue-600 cursor-pointer hover:text-blue-700"
                 }`}
               >
                 {isResendDisabled

@@ -172,7 +172,7 @@ export default function Navbar() {
         </li>
 
         <li
-          onClick={() => { navigate("/referral-help"); setAccountOpen(false); }}
+          onClick={() => { navigate("/refer"); setAccountOpen(false); }}
           className="flex items-center gap-3 px-4 py-3 hover:bg-blue-50 cursor-pointer"
         >
           <MdLocalOffer className="text-blue-600" />

@@ -133,10 +133,14 @@ export default function SeatSelection() {
 
         <div className="flex flex-col lg:flex-row gap-8">
           {/* LEFT SIDE - SEAT LAYOUT */}
+          
 
          <div className="bg-white h-full rounded-2xl p-2 sm:p-4 md:p-6 shadow-sm w-full lg:w-[55%]">
 
   <div className="flex flex-wrap justify-center gap-3 sm:gap-6">
+     <div className="flex items-center gap-2">
+    <SeatLegend />
+  </div>
 
     {layoutConfig?.lower && (
       <div className="relative">
@@ -161,9 +165,7 @@ export default function SeatSelection() {
 
   </div>
 
-  <div className="mt-6">
-    <SeatLegend />
-  </div>
+ 
 
 </div>
 

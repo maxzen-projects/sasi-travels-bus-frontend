@@ -84,7 +84,7 @@ export default function OffersPage() {
 
                     <div
                         key={index}
-                        className="relative rounded-2xl overflow-hidden h-[180px] flex items-center p-6 text-black"
+                        className="relative rounded-2xl overflow-hidden h-[221px] flex items-center p-6 text-black"
                     >
 
                         {/* Background Image */}
@@ -92,7 +92,7 @@ export default function OffersPage() {
                         <img
                             src={offer.image}
                             alt="offer"
-                            className="absolute inset-0 w-full h-full object-cover"
+                            className="absolute inset-0 w-[370px] h-[221px] object-cover"
                         />
 
                         {/* Overlay */}
@@ -112,7 +112,7 @@ export default function OffersPage() {
                         >
 
                             <div>
-                                <h3 className="font-semibold text-sm leading-snug">
+                                <h3 className="font-semibold text-[16px] leading-snug">
                                     {offer.title}
                                 </h3>
 

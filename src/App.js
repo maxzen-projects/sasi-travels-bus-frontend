@@ -26,6 +26,7 @@ const CancelTicketHelpPage = lazy(() => import("./pages/CancelTicketHelpPage"));
 const ResellHelpPage = lazy(() => import("./pages/ResellHelpPage"));
 const NeedHelpPage = lazy(() => import("./pages/NeedHelpPage"));
 const OffersPage = lazy(() => import("./pages/OffersPage"));
+const ReferralPage = lazy(() => import("./pages/ReferralPage"));
 
 export default function App() {
   return (
@@ -61,6 +62,8 @@ export default function App() {
             <Route path="/cancel-ticket-help" element={<CancelTicketHelpPage />} />
             <Route path="/help" element={<NeedHelpPage />} />
             <Route path="/resell-help" element={<ResellHelpPage />} />
+            <Route path="/refer" element={<ReferralPage />} />
+
             <Route path="/offerss" element={<OffersPage />} />
             <Route path="/login" element={<Login />} />
           </Routes>

@@ -87,7 +87,7 @@ function PopularRoutes() {
       POPULAR ROUTES
     </h2>
 
-    <p className="text-center text-gray-700 max-w-4xl text-lg text-start mx-auto mb-24">
+    <p className="text-center text-gray-700 max-w-5xl text-lg text-start mx-auto mb-24">
       Popular routes in a bus ticket booking app represent travel corridors with consistently high demand due to factors like daily commuting patterns, economic ties between cities, tourism flow, and limited alternative transport options. Highlighting these routes helps users discover commonly traveled journeys quickly, reduces search effort, and increases booking efficiency by leveraging collective user behavior and historical booking data.
     </p>
 

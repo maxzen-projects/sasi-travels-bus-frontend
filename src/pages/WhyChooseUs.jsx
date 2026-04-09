@@ -8,11 +8,12 @@ import {
   Bus,
   Map
 } from "lucide-react";
+import { PiSeatBold } from "react-icons/pi";
 
 export default function WhyChooseUs() {
   const features = [
     {
-      icon: Phone,
+      icon: PiSeatBold,
       title: "COMFORTABLE",
       desc: "Travel with well-maintained, spacious seats designed to make every trip enjoyable and smooth."
     },
@@ -47,9 +48,13 @@ export default function WhyChooseUs() {
     <section className="relative pb-16 py-8 bg-[#DDEFFF] bg-cover bg-center">
 
       {/* Heading */}
-      <h2 className="text-3xl sm:text-4xl font-semibold text-center text-[#0070FF] mb-16">
+      <h2 className="text-3xl sm:text-4xl font-semibold text-center text-[#0070FF] mb-12">
         WHY CHOOSE US
       </h2>
+
+      <p className="max-w-6xl text-center text-gray-700 text-lg text-start mx-auto mb-10">Choosing our bus ticket booking service ensures a comfortable, reliable, and hassle-free travel experience. Our platform allows passengers to easily search routes, compare schedules, and book tickets online within minutes. We focus on providing a user-friendly system so that anyone can reserve seats anytime and from anywhere.
+Our buses are well-maintained and equipped with comfortable seating to ensure a pleasant journey for every passenger. Safety is one of our top priorities, and our drivers are experienced and trained to provide secure travel. We also offer multiple routes and flexible timings, making it easier for passengers to plan their trips according to their convenience.
+In addition, our ticket prices are affordable, giving travelers a cost-effective way to reach their destinations. With reliable schedules, quick booking, and dependable service, we aim to make every journey smooth and enjoyable. By choosing our buses, passengers can travel with confidence, comfort, and convenience</p>
 
       {/* Features Grid */}
       <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 px-4">

@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import BookingHeader from "../pages/BookingHeader";
+import logo from "../assets/protection_symbol-removebg-preview 3.png";
 
 
 export default function PassengerDetails() {
@@ -234,68 +235,76 @@ const [errors, setErrors] = useState({});
           {/* PASSENGER DETAILS */}
 
           <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold mb-4">
-              Passenger Details
-            </h2>
 
-            <div className="grid md:grid-cols-3 gap-4">
+  {/* HEADER */}
+  <div className="flex justify-between items-center mb-4">
+    <h2 className="text-lg font-semibold text-gray-800">
+      Passenger Details
+    </h2>
 
-              <input
-                placeholder="Full Name"
-                value={passenger.name}
-                onChange={(e) =>
-                  setPassenger({ ...passenger, name: e.target.value })
-                }
-                className="border rounded-lg p-3"
-              />
+    <button className="text-blue-600 font-medium text-sm hover:underline">
+      + Add
+    </button>
+  </div>
 
-              {errors.name && (
-                <p className="text-red-500 text-sm">{errors.name}</p>
-              )}
+  {/* FORM */}
+  <div className="grid md:grid-cols-3 gap-4">
 
-              <input
-                type="number"
-                placeholder="Age"
-                value={passenger.age}
-                onChange={(e) =>
-                  setPassenger({ ...passenger, age: e.target.value })
-                }
-                className="border rounded-lg p-3"
-              />
+    <input
+      placeholder="Full Name"
+      value={passenger.name}
+      onChange={(e) =>
+        setPassenger({ ...passenger, name: e.target.value })
+      }
+      className="border rounded-lg p-3"
+    />
 
-              {errors.age && (
-                <p className="text-red-500 text-sm">{errors.age}</p>
-              )}
+    {errors.name && (
+      <p className="text-red-500 text-sm">{errors.name}</p>
+    )}
 
-              {/* Gender */}
+    <input
+      type="number"
+      placeholder="Age"
+      value={passenger.age}
+      onChange={(e) =>
+        setPassenger({ ...passenger, age: e.target.value })
+      }
+      className="border rounded-lg p-3"
+    />
 
-              <div className="flex gap-4 items-center">
+    {errors.age && (
+      <p className="text-red-500 text-sm">{errors.age}</p>
+    )}
 
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    checked={passenger.gender === "Male"}
-                    onChange={() =>
-                      setPassenger({ ...passenger, gender: "Male" })
-                    }
-                  />
-                  Male
-                </label>
+    {/* Gender */}
+    <div className="flex gap-4 items-center">
+      <label className="flex items-center gap-2">
+        <input
+          type="radio"
+          checked={passenger.gender === "Male"}
+          onChange={() =>
+            setPassenger({ ...passenger, gender: "Male" })
+          }
+        />
+        Male
+      </label>
 
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    checked={passenger.gender === "Female"}
-                    onChange={() =>
-                      setPassenger({ ...passenger, gender: "Female" })
-                    }
-                  />
-                  Female
-                </label>
+      <label className="flex items-center gap-2">
+        <input
+          type="radio"
+          checked={passenger.gender === "Female"}
+          onChange={() =>
+            setPassenger({ ...passenger, gender: "Female" })
+          }
+        />
+        Female
+      </label>
+    </div>
 
-              </div>
-            </div>
-          </div>
+  </div>
+
+</div>
 
           {/* CONTACT DETAILS */}
 
@@ -400,18 +409,53 @@ const [errors, setErrors] = useState({});
 
           {/* TRAVEL PROTECTION */}
 
-          <div className="bg-white rounded-xl shadow-sm p-6 flex justify-between items-center">
+          <div className="bg-white rounded-2xl shadow-md p-6 flex items-center justify-between max-w-3xl mx-auto border border-gray-100">
 
-            <div>
-              <p className="font-semibold">Travel Protection</p>
-              <p className="text-sm text-gray-500">
-                Insure your ride with just ₹20
-              </p>
-            </div>
+  {/* LEFT SECTION */}
+  <div className="flex items-center gap-4">
 
-            <input type="checkbox" className="w-5 h-5" />
+    {/* LOGO (you can replace src) */}
+    <img
+      src={logo} // 👉 replace with your image
+      alt="shield"
+      className="w-12 h-12 object-contain"
+    />
 
-          </div>
+    <div>
+      <p className="text-lg font-bold text-gray-800">
+        Travel Protection
+      </p>
+
+      <p className="text-sm text-gray-500 mt-1">
+        Insure your ride with just ₹20
+      </p>
+
+      <p className="text-xs text-gray-400 mt-1 cursor-pointer hover:underline">
+        More Details
+      </p>
+    </div>
+
+  </div>
+
+  {/* RIGHT TOGGLE (CUSTOM SWITCH) */}
+  <label className="relative inline-flex items-center cursor-pointer">
+
+    <input type="checkbox" className="sr-only peer" />
+
+    <div className="w-12 h-7 bg-gray-200 rounded-full peer 
+      peer-checked:bg-green-500 
+      transition-all duration-300">
+
+    </div>
+
+    <div className="absolute left-1 top-1 w-5 h-5 bg-white rounded-full shadow-md 
+      transition-all duration-300 
+      peer-checked:translate-x-5">
+    </div>
+
+  </label>
+
+</div>
 
         </div>
 
