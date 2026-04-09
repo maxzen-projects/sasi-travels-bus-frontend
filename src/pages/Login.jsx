@@ -151,7 +151,7 @@ export default function Login({ onClose }) {
           className={`w-full py-2.5 sm:py-3 rounded-full mt-4 font-semibold text-white text-sm sm:text-base
           ${
             isMobileValid && captchaVerified
-              ? "bg-red-600 hover:bg-red-700"
+              ? "bg-blue-600 hover:bg-blue-700"
               : "bg-gray-300 cursor-not-allowed"
           }`}
         >
