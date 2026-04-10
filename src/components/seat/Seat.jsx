@@ -164,12 +164,12 @@ export default function Seat({ seat, onSeatClick }) {
   if (isSleeper) {
     return (
 
-      <div className="flex flex-col items-center gap-1 w-8 sm:w-10 md:w-12">
+      <div className="flex flex-col items-center gap-1 w-10 sm:w-10 md:w-12">
         <button
           title={`Seat ${seat.id}`}
           disabled={seat.status === "sold"}
           onClick={() => onSeatClick(seat.id)}
-          className={`w-9 h-16 sm:w-9 sm:h-18 md:w-10 md:h-20 rounded-lg flex items-center justify-center relative transition ${getSeatStyle()}`}        >
+          className={`w-10 h-16 sm:w-10 sm:h-18 md:w-10 md:h-20 rounded-lg flex items-center justify-center relative transition ${getSeatStyle()}`}        >
 
           {seat.status !== "sold" && (
 
@@ -190,7 +190,7 @@ export default function Seat({ seat, onSeatClick }) {
 
         </button>
 
-        <span className={`text-xs font-semibold ${seat.status === 'sold' ? 'text-gray-400' : 'text-gray-700'}`}>
+        <span className={`text-xs text-start text-left font-semibold ${seat.status === 'sold' ? 'text-gray-400' : 'text-gray-700'}`}>
           {seat.status === "sold" ? "Sold" : `₹ ${seat.price}`}
         </span>
 

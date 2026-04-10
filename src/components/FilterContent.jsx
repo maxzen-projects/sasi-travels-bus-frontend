@@ -94,7 +94,7 @@ const FilterContent = ({
         className="rounded-2xl p-5 text-white shadow-md bg-cover bg-center w-full"
         style={{ backgroundImage: `url(${tic})` }}
       >
-        <h3 className="text-2xl md:text-3xl font-bold mb-1">
+        <h3 className="text-xl md:text-2xl font-bold mb-1">
           Ticket Resale
         </h3>
 
@@ -141,12 +141,12 @@ const FilterContent = ({
             Bus Type
           </h4>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 lg:grid-cols-2 gap-2">
 
             {[
               { label: "AC", key: "ac", icon: <FaSnowflake /> },
               { label: "Sleeper", key: "sleeper", icon: <FaBed /> },
-              { label: "Seater", key: "seater", icon: <AvailableSeaterIcon className="w-5 h-5 text-black text-bold" /> },
+              { label: "Seater", key: "seater", icon: <AvailableSeaterIcon className="w-5 h-5 text-black font-bold" /> },
               { label: "Non AC", key: "nonac", icon: <FaBan /> },
               { label: "Bus Track", icon: <FaMapMarkerAlt /> },
               { label: "New Buses", icon: <FaBusAlt /> },
@@ -239,7 +239,7 @@ const FilterContent = ({
       className="accent-blue-600 "
     />
 
-    <span className="text:xs">
+    <span className="text-xs">
       Seat Cancellation available on selected buses
     </span>
 

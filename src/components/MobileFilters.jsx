@@ -13,11 +13,13 @@ const MobileFilters = ({ showFilters, setShowFilters, ...filterProps }) => {
 
       {showFilters && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-end">
-          <div className="bg-white w-full rounded-t-xl p-4">
-            <FilterContent {...filterProps} />
+          <div className="bg-white w-full rounded-t-3xl flex flex-col max-h-[90vh]">
+            <div className="overflow-y-auto p-5 pb-2">
+              <FilterContent {...filterProps} />
+            </div>
             <button
               onClick={() => setShowFilters(false)}
-              className="w-full mt-4 bg-[#273BE2] text-white py-3 rounded-lg font-bold"
+              className="w-full bg-[#273BE2] text-white py-4 font-bold rounded-none"
             >
               Apply Filters
             </button>

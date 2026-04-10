@@ -94,75 +94,51 @@ export default function SearchForm() {
         </h2>
 
         {/* FROM */}
-        <div className="bg-white rounded-xl p-3 flex items-center gap-3 shadow-sm mb-1 relative" ref={fromRef}>
-          <FaMapMarkerAlt className="text-gray-500" />
-          <div className="w-full">
-            <p className="text-xs text-gray-400">From</p>
-            <input
-              type="text"
-              value={from}
-              onChange={(e) => { setFrom(e.target.value); setShowFromList(true); }}
-              onFocus={() => setShowFromList(true)}
-              className="font-semibold text-gray-800 outline-none w-full bg-transparent cursor-pointer"
-              placeholder="Enter city"
-            />
-            {showFromList && (
-              <ul className="absolute left-0 right-0 top-full mt-1 bg-white border rounded-xl shadow-lg z-30 max-h-40 overflow-y-auto">
-                {cities.filter(c => c.toLowerCase().includes(from.toLowerCase())).map((city) => (
-                  <li
-                    key={city}
-                    onClick={() => { setFrom(city); setShowFromList(false); }}
-                    className="px-4 py-2 hover:bg-blue-50 cursor-pointer text-sm font-medium border-b last:border-0"
-                  >
-                    {city}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </div>
+        {/* WRAPPER for FROM + SWAP + TO */}
+<div className="relative">
 
-        {/* SWAP */}
-        <div className="flex justify-end -mt-4 -mb-2 pr-2">
-          <button
-            onClick={swapCities}
-            className="bg-blue-600 text-white p-2 rounded-full shadow-md"
-          >
-            <FaExchangeAlt />
-          </button>
-        </div>
+  {/* FROM */}
+  <div className="bg-white rounded-xl p-3 flex items-center gap-3 shadow-sm mb-3 relative" ref={fromRef}>
+    <FaMapMarkerAlt className="text-gray-500" />
+    <div className="w-full">
+      <p className="text-xs text-gray-400">From</p>
+      <input
+        type="text"
+        value={from}
+        onChange={(e) => { setFrom(e.target.value); setShowFromList(true); }}
+        onFocus={() => setShowFromList(true)}
+        className="font-semibold text-gray-800 outline-none w-full bg-transparent"
+      />
+    </div>
+  </div>
 
-        {/* TO */}
-        <div className="bg-white rounded-xl p-2 flex items-center gap-3 shadow-sm mb-4 relative" ref={toRef}>
-          <FaMapMarkerAlt className="text-gray-500" />
-          <div className="w-full">
-            <p className="text-xs text-gray-400">To</p>
-            <input
-              type="text"
-              value={to}
-              onChange={(e) => { setTo(e.target.value); setShowToList(true); }}
-              onFocus={() => setShowToList(true)}
-              className="font-semibold text-gray-800 outline-none w-full bg-transparent cursor-pointer"
-              placeholder="Enter city"
-            />
-            {showToList && (
-              <ul className="absolute left-0 right-0 top-full mt-1 bg-white border rounded-xl shadow-lg z-30 max-h-40 overflow-y-auto">
-                {cities.filter(c => c.toLowerCase().includes(to.toLowerCase())).map((city) => (
-                  <li
-                    key={city}
-                    onClick={() => { setTo(city); setShowToList(false); }}
-                    className="px-4 py-2 hover:bg-blue-50 cursor-pointer text-sm font-medium border-b last:border-0"
-                  >
-                    {city}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </div>
+  {/* 🔥 SWAP BUTTON (CENTERED) */}
+  <button
+    onClick={swapCities}
+    className="absolute right-3 top-1/2 -translate-y-1/2 bg-blue-600 text-white p-2 rounded-full shadow-md z-10"
+  >
+    <FaExchangeAlt />
+  </button>
+
+  {/* TO */}
+  <div className="bg-white rounded-xl p-3 flex items-center gap-3 shadow-sm mt-3 relative" ref={toRef}>
+    <FaMapMarkerAlt className="text-gray-500" />
+    <div className="w-full">
+      <p className="text-xs text-gray-400">To</p>
+      <input
+        type="text"
+        value={to}
+        onChange={(e) => { setTo(e.target.value); setShowToList(true); }}
+        onFocus={() => setShowToList(true)}
+        className="font-semibold text-gray-800 outline-none w-full bg-transparent"
+      />
+    </div>
+  </div>
+
+</div>
 
         {/* DATE + TOGGLE */}
-        <div className="flex flex-col gap-3 mb-4">
+        <div className="flex flex-col gap-3 mt-3 mb-4">
           <div className="flex-1 bg-white rounded-xl p-3 flex items-center gap-2 shadow-sm">
             <FaCalendarAlt className="text-gray-500" />
             <input

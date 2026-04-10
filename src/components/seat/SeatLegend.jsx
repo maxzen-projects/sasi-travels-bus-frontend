@@ -70,19 +70,19 @@ export default function SeatLegend() {
   ];
 
   return (
-   <div className="w-full flex justify-center">
+   <div className="w-full flex justify-center px-2">
 
-  <div className="bg-white rounded-2xl shadow-lg p-6 mt-6 max-w-3xl">
+  <div className="bg-white rounded-xl sm:rounded-2xl shadow-md sm:shadow-lg p-3 sm:p-6 mt-4 sm:mt-6 w-full max-w-3xl border border-gray-100">
 
-    <div className="flex flex-wrap justify-center items-center gap-10">
+    <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-8 md:gap-10">
 
       {legends.map((item, index) => (
         <div
           key={index}
-          className="flex flex-col items-center gap-2 text-center"
+          className="flex flex-col items-center gap-1.5 sm:gap-2 text-center min-w-[50px] sm:min-w-[70px]"
         >
           {item.box}
-          <p className="text-sm font-semibold text-gray-700">
+          <p className="text-[10px] sm:text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap">
             {item.label}
           </p>
         </div>
