@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 import SearchForm from "../components/SearchForm";
 import Features from "../components/Features";
 import PopularRoutes from "../components/PopularRoutes";
-import travelBg from "../assets/home.jpg";
+import travelBg from "../assets/sasiBg.jpg";
 import Amenities from "./Amenities";
 import DownloadApp from "../pages/DownloadApp";
 import FAQSection from "./FAQSection";
@@ -13,7 +13,7 @@ import WhyChooseUs from "./WhyChooseUs";
 import TravelPoster from "./TravelPoster";
 import SupportAndReviews from "./SupportAndReviews";
 import OffersSlider from "./OffersSlider";
-import bg from "../assets/background.jpeg";
+// import bg from "../assets/background.jpeg";
 
 
 export default function Home() {
@@ -67,13 +67,13 @@ export default function Home() {
 
             {/* HEADING */}
 
-           <h1 className="text-black font-bold leading-tight">
+           <h1 className="text-white font-bold leading-tight">
               <span className="block text-3xl sm:text-4xl md:text-5xl">
                 Your Journey
               </span>
               <span className="block mt-2 text-3xl sm:text-4xl md:text-5xl">
                 of Exploration{" "}
-                <span className="text-blue-600 font-serif">
+                <span className="text-white font-serif">
                   Begins Here!
                 </span>
               </span>
@@ -81,7 +81,7 @@ export default function Home() {
 
             {/* DESCRIPTION */}
 
-            <p className="mt-6 text-black text-base sm:text-lg leading-relaxed slide-in-right">
+            <p className="mt-6 text-white text-base sm:text-lg leading-relaxed slide-in-right">
               A reliable platform to book bus tickets online. Discover verified operators,
               flexible timings, secure payments, and comfortable travel options.
             </p>
@@ -94,12 +94,17 @@ export default function Home() {
 
       {/* OTHER SECTIONS */}
 
-      <SearchForm />
-      <div className="-mt-28">
-      <PopularRoutes /></div>
+      <section id="book-tickets">
+        <SearchForm />
+      </section>
+      <section id="routes" className="-mt-28">
+        <PopularRoutes />
+      </section>
       <Features />
       <OffersSlider />
-      <WhyChooseUs />
+      <section id="about">
+        <WhyChooseUs />
+      </section>
       <TravelPoster />
       <Amenities />
       

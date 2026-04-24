@@ -5,7 +5,7 @@ export default function SeatDeck({ title, layout, seatMap, onSeatClick }) {
   const deckPrefix = title === "UPPER" ? "U" : "L";
   
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-8 w-68">
+    <div className="bg-white rounded-2xl shadow-lg p-8 w-72">
 
       {/* HEADER */}
       <div className="flex justify-between items-center mb-6">

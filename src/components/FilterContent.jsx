@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   FaSnowflake,
   FaBed,
@@ -11,10 +12,9 @@ import {
   FaSearch,
   FaMicrophone,
 } from "react-icons/fa";
-import robo from "../assets/roboLogo.png";
 import SidebarSection from "./SidebarSection";
 import { AvailableSeaterIcon } from "./seat/Seat";
-import tic from "../assets/TicketToResale.jpg";
+// import tic from "../assets/TicketToResale.jpg";
 
 const amenitiesList = [
   "WiFi",
@@ -49,6 +49,29 @@ const FilterContent = ({
   sortBy,
   setSortBy,
 }) => {
+  const [isListening, setIsListening] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+
+  const handleVoiceSearch = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Voice search is not supported in this browser.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+
+    recognition.onstart = () => setIsListening(true);
+    recognition.onend = () => setIsListening(false);
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setSearchValue(transcript);
+    };
+
+    recognition.start();
+  };
 
   return (
     <div className="space-y-6 w-full">
@@ -56,7 +79,20 @@ const FilterContent = ({
       {/* SEARCH CARD */}
       <div className="bg-gradient-to-br from-purple-300 to-blue-400 rounded-2xl p-4 text-white shadow-md w-full">
 
-        <div className="flex items-center gap-2 mb-4">
+
+      <div
+        className="rounded-2xl p-2 text-white bg-cover bg-center w-full"
+        // style={{ backgroundImage: `url(${tic})` }}
+      >
+        <h3 className="text-xl md:text-2xl font-bold mb-1">
+          Ticket Resale
+        </h3>
+
+        <p className="text-sm font-semibold text-gray-900">
+          Can't travel anymore? Easily resell your booked ticket and recover your amount.
+        </p>
+      </div>
+        {/* <div className="flex items-center gap-2 mb-4">
           <div className="bg-white text-blue-500 rounded-full ">
             <img src={robo}
             alt="robo"
@@ -67,30 +103,36 @@ const FilterContent = ({
           <span className="text-sm font-semibold">
             Logo Name
           </span>
-        </div>
+        </div> */}
 
-        <div className="flex items-center gap-3">
+        {/* <div className="flex items-center gap-3">
 
           <div className="flex items-center bg-white text-gray-700 rounded-full px-3 py-2 flex-1">
             <FaSearch className="text-gray-400 mr-2" />
+            
 
             <input
               type="text"
               placeholder="Search"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
               className="outline-none text-sm w-full bg-transparent"
             />
           </div>
 
-          <button className="bg-white text-gray-700 rounded-full p-3 shadow">
+          <button 
+            onClick={handleVoiceSearch}
+            className={`rounded-full p-3 shadow transition-all duration-300 ${isListening ? "bg-red-500 text-white animate-pulse" : "bg-white text-gray-700"}`}
+          >
             <FaMicrophone />
           </button>
 
-        </div>
+        </div> */}
 
       </div>
 
       {/* TICKET RESALE CARD */}
-      <div
+      {/* <div
         className="rounded-2xl p-5 text-white shadow-md bg-cover bg-center w-full"
         style={{ backgroundImage: `url(${tic})` }}
       >
@@ -101,7 +143,7 @@ const FilterContent = ({
         <p className="text-sm font-semibold text-gray-900">
           Can't travel anymore? Easily resell your booked ticket and recover your amount.
         </p>
-      </div>
+      </div> */}
 
       {/* FILTERS */}
       <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 flex flex-col w-full">

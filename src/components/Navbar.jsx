@@ -5,7 +5,8 @@ import {
   FaBars,
   FaTimes,
   FaUserCircle,
-  FaCommentDots,
+  FaExpandAlt,
+  FaCompressAlt,
 } from "react-icons/fa";
 import {
   MdLocalOffer,
@@ -17,7 +18,9 @@ import Login from "../pages/Login";
 import LanguageSelector from "./LanguageSelector";
 import { useLanguage } from "./context/LanguageContext";
 import { useAuth } from "./context/AuthContext";
-import logo from "../assets/logo.png";
+import logo from "../assets/sasiLogo-removebg-preview.png";
+import robo from "../assets/roboLogo.png";
+
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -25,11 +28,24 @@ export default function Navbar() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isChatFullScreen, setIsChatFullScreen] = useState(false);
 
   const { language, changeLanguage } = useLanguage();
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+
+  const helpCategories = [
+    { name: "Ticket Booking", path: "/faqspage" },
+    { name: "Wallet", path: "/wallet" },
+    { name: "Offers & Discount", path: "/offers-discounts" },
+    { name: "Referral Help", path: "/referral-help" },
+    { name: "Payments & Refund", path: "/payments-refund" },
+    { name: "Ticket Cancellation", path: "/cancel-ticket-help" },
+    { name: "Other FAQ’s", path: "/faqs" },
+    { name: "Ticket Resell", path: "/resell-help" },
+  ];
 
   const isHome = location.pathname === "/";
 
@@ -45,7 +61,7 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [isHome]);
 
-  const textColor = isHome && !scrolled ? "text-black" : "text-gray-700";
+  const textColor = isHome && !scrolled ? "text-white" : "text-gray-700";
   const navBg =
     isHome && !scrolled ? "bg-transparent" : "bg-white shadow-sm";
 
@@ -61,9 +77,9 @@ export default function Navbar() {
         <img
           src={logo}
           alt="SasiBus Logo"
-          className="w-10 h-10 object-cover"
+          className="w-18 h-14 object-cover"
         />
-        <div className="font-bold text-xl text-blue-600">
+        <div className={`font-bold text-2xl ${isHome && !scrolled ? "text-white" : "text-blue-600"}`}>
           SasiBus
         </div>
 
@@ -114,7 +130,9 @@ export default function Navbar() {
   {!user && (
     <button
       onClick={() => setIsLoginOpen(true)}
-      className="flex items-center gap-2 px-4 py-2 border border-blue-500 text-blue-600 rounded-full hover:bg-blue-50 transition text-sm font-medium"
+      className={`flex items-center gap-2 px-4 py-2 border rounded-full transition text-sm font-medium ${
+        isHome && !scrolled ? "border-white text-white hover:bg-white/10" : "border-blue-500 text-blue-600 hover:bg-blue-50"
+      }`}
     >
       <FaUserCircle className="text-lg" />
       Login / Sign up
@@ -126,7 +144,9 @@ export default function Navbar() {
   {user && (
     <button
       onClick={() => setAccountOpen(!accountOpen)}
-      className="flex items-center gap-2 px-4 py-2 border border-blue-500 text-blue-600 rounded-full hover:bg-blue-50 transition text-sm font-medium"
+      className={`flex items-center gap-2 px-4 py-2 border rounded-full transition text-sm font-medium ${
+        isHome && !scrolled ? "border-white text-white hover:bg-white/10" : "border-blue-500 text-blue-600 hover:bg-blue-50"
+      }`}
     >
       <FaUserCircle className="text-lg" />
       My Account
@@ -302,13 +322,73 @@ export default function Navbar() {
         selected={language}
       />
 
+      {/* Floating Chat Popup */}
+      {isChatOpen && (
+        <div
+          className={`fixed z-[60] bg-white shadow-2xl transition-all duration-300 border border-gray-200 overflow-hidden flex flex-col
+          ${isChatFullScreen 
+            ? "inset-4 md:inset-10 rounded-2xl" 
+            : "bottom-24 right-6 w-[90vw] max-w-[380px] h-[500px] rounded-2xl"}`}
+        >
+          {/* Header */}
+          <div className="bg-[#0070FF] text-white p-4 flex justify-between items-center shrink-0">
+            <div className="flex items-center gap-2">
+              <img src={robo} alt="Support" className="w-6 h-6 object-contain" />
+              <span className="font-semibold text-sm sm:text-base">Support Chat</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => setIsChatFullScreen(!isChatFullScreen)}
+                className="hover:text-gray-200 transition-colors p-1"
+                title={isChatFullScreen ? "Minimize" : "Maximize"}
+              >
+                {isChatFullScreen ? <FaCompressAlt size={16} /> : <FaExpandAlt size={16} />}
+              </button>
+              <button 
+                onClick={() => setIsChatOpen(false)}
+                className="hover:text-gray-200 transition-colors p-1"
+              >
+                <FaTimes size={18} />
+              </button>
+            </div>
+          </div>
+
+          {/* Chat Content */}
+          <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
+            <p className="text-center text-gray-600 mb-8 font-medium text-sm sm:text-base">
+              Hi there! 👋 How can we help you today?
+            </p>
+            
+            <div className={`grid gap-4 ${isChatFullScreen ? "grid-cols-2 md:grid-cols-4" : "grid-cols-1"}`}>
+              {helpCategories.map((item, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    navigate(item.path);
+                    setIsChatOpen(false);
+                  }}
+                  className="border-2 border-[#0070FF] text-[#0070FF] py-3 px-4 rounded-xl hover:bg-blue-50 transition font-medium text-sm text-center shadow-sm hover:shadow-md"
+                >
+                  {item.name}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="p-4 border-t bg-white text-center shrink-0">
+            <p className="text-[10px] sm:text-xs text-gray-400">Powered by SasiBus Support</p>
+          </div>
+        </div>
+      )}
+
       {/* Floating Chat Button */}
       <button
-        onClick={() => navigate("/help")}
-        className="fixed bottom-6 right-6 z-50 bg-[#0070FF] text-white p-4 rounded-full shadow-lg hover:shadow-2xl hover:bg-blue-600 transition-all duration-300 flex items-center justify-center group"
+        onClick={() => setIsChatOpen(!isChatOpen)}
+        className="fixed bottom-6 right-6 z-50 bg-[#0070FF] text-white p-0 rounded-full shadow-lg hover:shadow-2xl hover:bg-blue-600 transition-all duration-300 flex items-center justify-center group"
         aria-label="Chat with Support"
       >
-        <FaCommentDots size={24} />
+        <img src={robo} alt="Chat" className="w-16 h-16 object-contain" />
         <span className="absolute right-full mr-3 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
           Chat with us
         </span>

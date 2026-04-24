@@ -1,19 +1,21 @@
+import { SEAT_STATUS } from "../constants/seatStatus";
+
 const getRandomStatus = (id) => {
   // Make some seats sold, some reserved for ladies/gents for demonstration
   const seatNum = parseInt(id.substring(1));
 
   if (seatNum > 25 && id.startsWith("L"))
-    return { status: "sold", originalStatus: "sold", gender: null };
+    return { status: SEAT_STATUS.SOLD, originalStatus: SEAT_STATUS.SOLD, gender: null };
   if (seatNum % 7 === 0)
     return {
-      status: "female",
-      originalStatus: "female",
+      status: SEAT_STATUS.AVAILABLE,
+      originalStatus: SEAT_STATUS.AVAILABLE,
       gender: "female",
     };
   if (seatNum % 11 === 0)
-    return { status: "male", originalStatus: "male", gender: "male" };
+    return { status: SEAT_STATUS.AVAILABLE, originalStatus: SEAT_STATUS.AVAILABLE, gender: "male" };
 
-  return { status: "available", originalStatus: "available", gender: null };
+  return { status: SEAT_STATUS.AVAILABLE, originalStatus: SEAT_STATUS.AVAILABLE, gender: null };
 };
 
 export const generateSeats = (layoutConfig) => {

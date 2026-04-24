@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, FileText } from "lucide-react";
+import { 
+  FaChevronLeft, 
+  FaChevronRight, 
+  FaRegFileAlt, 
+  FaArrowLeft,
+  FaRegThumbsUp,
+  FaRegThumbsDown
+} from "react-icons/fa";
 
 import step1 from "../assets/step1.jpeg";
 import step2 from "../assets/step2.jpeg";
@@ -7,7 +14,7 @@ import step3 from "../assets/step3.jpeg";
 import step4 from "../assets/step4.jpeg";
 import step5 from "../assets/step4.jpeg";
 
-export default function FAQPage() {
+export default function FAQSPage() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -103,7 +110,7 @@ export default function FAQPage() {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen px-4 py-10">
+    <div className="bg-gray-100 min-h-screen px-4 py-20">
 
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-8">
 
@@ -111,7 +118,8 @@ export default function FAQPage() {
         <div className="w-full md:w-1/3 bg-white rounded-xl shadow">
 
           <div className="p-4 font-semibold border-b flex items-center gap-2">
-            ← FAQ’s
+            <FaArrowLeft className="text-gray-600 cursor-pointer" onClick={() => window.history.back()} /> 
+            FAQ’s
           </div>
 
           {faqs.map((item, index) => (
@@ -128,7 +136,7 @@ export default function FAQPage() {
                     : "hover:bg-gray-50"
                 }`}
             >
-              <FileText size={16} />
+              <FaRegFileAlt size={16} />
               {item.question}
             </div>
           ))}
@@ -160,7 +168,7 @@ export default function FAQPage() {
                   disabled={currentSlide === 0}
                   className="absolute left-0 bg-white shadow p-2 rounded-full disabled:opacity-30"
                 >
-                  <ChevronLeft size={22} />
+                  <FaChevronLeft size={22} />
                 </button>
 
                 {/* IMAGE */}
@@ -178,7 +186,7 @@ export default function FAQPage() {
                   }
                   className="absolute right-0 bg-white shadow p-2 rounded-full disabled:opacity-30"
                 >
-                  <ChevronRight size={22} />
+                  <FaChevronRight size={22} />
                 </button>
               </div>
 
@@ -221,10 +229,10 @@ export default function FAQPage() {
 
       <div className="flex justify-center gap-4">
         <button className="bg-blue-100 text-blue-600 p-2 rounded-full hover:bg-blue-200">
-          👍
+          <FaRegThumbsUp />
         </button>
         <button className="bg-blue-100 text-blue-600 p-2 rounded-full hover:bg-blue-200">
-          👎
+          <FaRegThumbsDown />
         </button>
       </div>
     </div>

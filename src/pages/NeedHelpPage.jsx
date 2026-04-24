@@ -6,7 +6,7 @@ export default function NeedHelpPage() {
   const navigate = useNavigate();
 
   const helpCategories = [
-    { name: "Ticket Booking", path: "/booking" },
+    { name: "Ticket Booking", path: "/faqspage" },
     { name: "Wallet", path: "/wallet" },
     { name: "Offers & Discount", path: "/offers-discounts" },
     { name: "Refferal Help", path: "/referral-help" },

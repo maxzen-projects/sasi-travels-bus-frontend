@@ -9,6 +9,17 @@ function RouteFocusManager() {
   const location = useLocation();
 
   useEffect(() => {
+    if (location.hash) {
+      const timer = setTimeout(() => {
+        document.querySelector(location.hash)?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+
     // Set a timeout to ensure the new page content is rendered before focusing.
     const timer = setTimeout(() => {
       const mainHeading = document.querySelector('main h1');
@@ -19,7 +30,7 @@ function RouteFocusManager() {
     }, 100); // A small delay might be needed for components to render.
 
     return () => clearTimeout(timer);
-  }, [location.pathname]);
+  }, [location.pathname, location.hash]);
 
   return null; // This component does not render anything.
 }

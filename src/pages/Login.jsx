@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { FaTimes, FaChevronDown, FaGoogle, FaCheckCircle, FaArrowLeft } from "react-icons/fa";
 import { useAuth } from "../components/context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { createPortal } from "react-dom";
 
 export default function Login({ onClose }) {
 
@@ -66,11 +67,15 @@ export default function Login({ onClose }) {
     }
   };
 
-  return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 px-3" onClick={onClose}>
-
-      <div className="bg-white w-full max-w-[500px] rounded-2xl shadow-xl relative p-5 sm:p-6" onClick={(e) => e.stopPropagation()}>
-
+ return createPortal(
+  <div
+    className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] px-3"
+    onClick={onClose}
+  >
+    <div
+      className="bg-white w-full max-w-[500px] rounded-2xl shadow-xl relative p-5 sm:p-6"
+      onClick={(e) => e.stopPropagation()}
+    >
         {/* Close Button */}
         <button onClick={onClose} className="absolute top-3 right-3 bg-gray-100 p-2 rounded-full hover:bg-blue-100 z-10">
           <FaTimes />
@@ -235,6 +240,7 @@ export default function Login({ onClose }) {
           </>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

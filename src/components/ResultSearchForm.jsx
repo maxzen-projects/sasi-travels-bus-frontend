@@ -4,7 +4,7 @@ import {
   FaArrowLeft
 } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import logo from "../assets/logo.png";
+import logo from "../assets/sasiLogo-removebg-preview.png";
 
 export default function ResultSearchForm({
   from,
@@ -65,7 +65,7 @@ export default function ResultSearchForm({
           <div
             className="overflow-hidden mr-3"
             style={{
-              width: `${progress * 96}px`
+              width: `${progress * 112}px`
             }}
           >
             <img
@@ -82,12 +82,13 @@ export default function ResultSearchForm({
 
           {/* 🔥 SEARCH FORM */}
           <div
-            className="flex items-center bg-white border border-gray-200 w-full rounded-3xl shadow-xl"
-            style={{
-              transform: `scale(${scale})`,
-              transition: "transform 0.1s linear"
-            }}
-          >
+  style={{
+    transform: `scale(${scale})`,
+    transition: "transform 0.1s linear",
+    width: "100%"
+  }}
+>
+  <div className="flex items-center bg-white border border-gray-200 w-full rounded-3xl shadow-xl">
             {/* FROM */}
             <div className="flex items-center gap-3 px-6 py-4 border-r border-gray-200 flex-1">
               <div className="flex flex-col w-full">
@@ -165,6 +166,7 @@ export default function ResultSearchForm({
               <FaSearch />
             </button>
           </div>
+        </div>
         </div>
       </div>
 

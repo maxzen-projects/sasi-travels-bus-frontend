@@ -1,4 +1,6 @@
 import { FaMale, FaFemale } from "react-icons/fa";
+import { SEAT_STATUS } from "../../constants/seatStatus";
+import { getCushionColor, getIconColor, getSeatStyle } from "../../utils/seatUtils";
 
 /* =========================
    SEATER ICONS
@@ -84,78 +86,48 @@ const LadiesSelectedSeaterIcon = ({ className }) => (
 );
 
 export default function Seat({ seat, onSeatClick }) {
-
-  /* =========================
-     BORDER STYLE
-  ========================= */
-
-  const getSeatStyle = () => {
-
-    if (seat.status === "sold")
-      return "bg-gray-200 border-gray-300 cursor-not-allowed";
-
-    if (seat.status === "selected")
-      return "bg-green-300 border-2 border-white";
-
-    if (seat.gender === "male")
-      return "bg-white border-2 border-blue-500 hover:bg-blue-50";
-
-    if (seat.gender === "female")
-      return "bg-white border-2 border-pink-500 hover:bg-pink-50";
-
-    if (seat.ladiesOnly)
-      return "bg-white border-2 border-pink-500 hover:bg-pink-50";
-
-    return "bg-white border-2 border-green-500 hover:bg-green-50";
-  };
-
-  /* =========================
-     ICON COLOR
-  ========================= */
-
-  const getIconColor = () => {
-    const { status, gender, ladiesOnly } = seat;
-
-    if (status === "sold") {
-      return "text-gray-300";
-    }
-
-    if (ladiesOnly) {
-      return "text-pink-500";
-    }
-
-    if (gender === "female") {
-      return "text-pink-500";
-    }
-
-    if (gender === "male") {
-      return "text-blue-500";
-    }
-
-    return "text-green-600";
-  };
-  /* =========================
-     CUSHION COLOR
-  ========================= */
-
-  const getCushionColor = () => {
-
-    if (seat.status === "selected")
-      return "bg-green-500";
-
-    if (seat.gender === "male")
-      return "bg-blue-400";
-
-    if (seat.gender === "female")
-      return "bg-pink-500";
-
-    if (seat.ladiesOnly)
-      return "bg-pink-500";
-
-    return "bg-green-400";
-  };
-
   const isSleeper = seat.type === "sleeper";
+  const isSold = seat.status === SEAT_STATUS.SOLD;
+  const isSelected = seat.status === SEAT_STATUS.SELECTED;
+  const seatStyle = getSeatStyle(seat);
+  const iconColor = getIconColor(seat);
+  const cushionColor = getCushionColor(seat);
+  const handleClick = () => onSeatClick(seat.id);
+
+  const renderSleeperGenderIcon = () => {
+    if (seat.gender === 'male') return <FaMale className={`text-2xl ${iconColor}`} />;
+    if (seat.gender === 'female') return <FaFemale className={`text-2xl ${iconColor}`} />;
+    if (seat.ladiesOnly) return <FaFemale className={`text-2xl ${iconColor}`} />;
+    return null;
+  };
+
+  const renderSeaterIcon = () => {
+    if (isSold) {
+      return <SoldSeaterIcon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />;
+    }
+
+    if (isSelected) {
+      if (seat.ladiesOnly) {
+        return <LadiesSelectedSeaterIcon className="w-8 h-8" />;
+      }
+
+      return <SelectedSeaterIcon className="w-8 h-8" />;
+    }
+
+    if (seat.gender === "male") {
+      return <MaleBookedSeaterIcon className="w-8 h-8" />;
+    }
+
+    if (seat.gender === "female") {
+      return <FemaleBookedSeaterIcon className="w-8 h-8" />;
+    }
+
+    if (seat.ladiesOnly) {
+      return <LadiesAvailableSeaterIcon className="w-8 h-8" />;
+    }
+
+    return <AvailableSeaterIcon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-green-500" />;
+  };
 
   /* =========================
      SLEEPER SEAT
@@ -167,22 +139,16 @@ export default function Seat({ seat, onSeatClick }) {
       <div className="flex flex-col items-center gap-1 w-10 sm:w-10 md:w-12">
         <button
           title={`Seat ${seat.id}`}
-          disabled={seat.status === "sold"}
-          onClick={() => onSeatClick(seat.id)}
-          className={`w-10 h-16 sm:w-10 sm:h-18 md:w-10 md:h-20 rounded-lg flex items-center justify-center relative transition ${getSeatStyle()}`}        >
+          disabled={isSold}
+          onClick={handleClick}
+          className={`w-10 h-16 sm:w-10 sm:h-18 md:w-10 md:h-20 rounded-lg flex items-center justify-center relative transition ${seatStyle}`}        >
 
-          {seat.status !== "sold" && (
+          {!isSold && (
 
             <div className="flex items-center justify-center">
-              {(() => {
-                if (seat.gender === 'male') return <FaMale className={`text-2xl ${getIconColor()}`} />
-                if (seat.gender === 'female') return <FaFemale className={`text-2xl ${getIconColor()}`} />
-                if (seat.ladiesOnly)
-                  return <FaFemale className={`text-2xl ${getIconColor()}`} />;
-                return null
-              })()}
+              {renderSleeperGenderIcon()}
               <div
-                className={`absolute -bottom-1 w-6 h-2 rounded-full mb-2 ${getCushionColor()}`}
+                className={`absolute -bottom-1 w-6 h-2 rounded-full mb-2 ${cushionColor}`}
               ></div>
             </div>
 
@@ -190,8 +156,8 @@ export default function Seat({ seat, onSeatClick }) {
 
         </button>
 
-        <span className={`text-xs text-start text-left font-semibold ${seat.status === 'sold' ? 'text-gray-400' : 'text-gray-700'}`}>
-          {seat.status === "sold" ? "Sold" : `₹ ${seat.price}`}
+        <span className={`text-xs text-start text-left font-semibold ${isSold ? 'text-gray-400' : 'text-gray-700'}`}>
+          {isSold ? "Sold" : `₹ ${seat.price}`}
         </span>
 
       </div>
@@ -208,37 +174,18 @@ export default function Seat({ seat, onSeatClick }) {
 
       <button
         title={`Seat ${seat.id}`}
-        disabled={seat.status === "sold"}
-        onClick={() => onSeatClick(seat.id)}
+        disabled={isSold}
+        onClick={handleClick}
         className="flex items-center justify-center disabled:cursor-not-allowed w-8 h-8"
       >
-        {(() => {
-          if (seat.status === "sold") {
-            return <SoldSeaterIcon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />;
-          }
-          if (seat.status === "selected") {
-            if (seat.ladiesOnly) {
-              return <LadiesSelectedSeaterIcon className="w-8 h-8" />;
-            }
-            return <SelectedSeaterIcon className="w-8 h-8" />;
-          }
-          if (seat.gender === "male") {
-            return <MaleBookedSeaterIcon className="w-8 h-8" />;
-          }
-          if (seat.gender === "female") {
-            return <FemaleBookedSeaterIcon className="w-8 h-8" />;
-          }
-          if (seat.ladiesOnly) {
-            return <LadiesAvailableSeaterIcon className="w-8 h-8" />;
-          }
-          return <AvailableSeaterIcon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-green-500" />;
-        })()}
+        {renderSeaterIcon()}
       </button>
 
-      <span className={`text-xs font-semibold ${seat.status === 'sold' ? 'text-gray-400' : 'text-gray-700'}`}>
-        {seat.status === "sold" ? "Sold" : `₹ ${seat.price}`}
+      <span className={`text-xs font-semibold ${isSold ? 'text-gray-400' : 'text-gray-700'}`}>
+        {isSold ? "Sold" : `₹ ${seat.price}`}
       </span>
 
     </div>
   );
 }
+

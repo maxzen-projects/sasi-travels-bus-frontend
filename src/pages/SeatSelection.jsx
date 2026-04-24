@@ -8,6 +8,8 @@ import SeatLegend from "../components/seat/SeatLegend";
 import BusDetailsPanel from "../components/seat/BusDetailsPanel";
 
 import { layoutConfigs } from "../data/layoutConfigs";
+import { ROUTES } from "../constants/routes";
+import { SEAT_STATUS } from "../constants/seatStatus";
 import { generateSeats } from "../utils/generateSeats";
 
 export default function SeatSelection() {
@@ -19,18 +21,8 @@ export default function SeatSelection() {
   const busType = bus?.layoutType || "1+2";
   const layoutConfig = layoutConfigs[busType] || layoutConfigs["1+2"];
 
-  const [seats, setSeats] = useState(() => {
-    const initialSeats = generateSeats(layoutConfig);
-
-    return initialSeats.map((seat) => {
-      // Ensure originalStatus exists so we can revert to it when deselecting
-      const s = { ...seat, originalStatus: seat.status || "available" };
-      if (["L5", "L6", "U5", "U6"].includes(seat.id)) {
-        return { ...s, ladiesOnly: true };
-      }
-      return s;
-    });
-  });
+  const [seats, setSeats] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const HOLD_TIME_SECONDS = 300;
 
@@ -38,7 +30,33 @@ export default function SeatSelection() {
   const [isTimerActive, setIsTimerActive] = useState(false);
   const [showExpiredBanner, setShowExpiredBanner] = useState(false);
 
-  const selectedSeats = seats.filter((s) => s.status === "selected");
+  useEffect(() => {
+    if (!bus) {
+      setIsLoading(false);
+      return;
+    }
+
+    const initialSeats = generateSeats(layoutConfig).map((seat) => {
+      const s = {
+        ...seat,
+        originalStatus: seat.status || SEAT_STATUS.AVAILABLE,
+      };
+
+      if (["L5", "L6", "U5", "U6"].includes(seat.id)) {
+        return { ...s, ladiesOnly: true };
+      }
+
+      return s;
+    });
+
+    setSeats(initialSeats);
+    setIsLoading(false);
+  }, [bus, layoutConfig]);
+
+  const selectedSeats = useMemo(
+    () => seats.filter((s) => s.status === SEAT_STATUS.SELECTED),
+    [seats]
+  );
 
   useEffect(() => {
     if (selectedSeats.length > 0 && !isTimerActive) {
@@ -60,7 +78,7 @@ export default function SeatSelection() {
 
       setSeats((prev) =>
         prev.map((s) =>
-          s.status === "selected"
+          s.status === SEAT_STATUS.SELECTED
             ? { ...s, status: s.originalStatus }
             : s
         )
@@ -78,13 +96,13 @@ export default function SeatSelection() {
   const onSeatClick = useCallback((id) => {
     setSeats((prev) =>
       prev.map((s) =>
-        s.id === id && s.status !== "sold"
+        s.id === id && s.status !== SEAT_STATUS.SOLD
           ? {
               ...s,
               status:
-                s.status === "selected"
+                s.status === SEAT_STATUS.SELECTED
                   ? s.originalStatus
-                  : "selected",
+                  : SEAT_STATUS.SELECTED,
             }
           : s
       )
@@ -99,14 +117,22 @@ export default function SeatSelection() {
   ), [selectedSeats]);
 
   const handleProceed = useCallback(() => {
-    navigate("/boarding-dropping", {
+    navigate(ROUTES.BOARDING_DROPPING, {
       state: { selectedSeats, totalPrice, bus, from, to, date },
     });
   }, [navigate, selectedSeats, totalPrice, bus, from, to, date]);
 
   // If state is missing, the page was likely accessed directly.
+  if (isLoading) {
+    return <div className="p-8 text-center text-xl">Loading seats...</div>;
+  }
+
   if (!bus) {
     return <div className="p-8 text-center text-xl">Invalid session. Please start your search again from the homepage.</div>;
+  }
+
+  if (!seats.length) {
+    return <div className="p-8 text-center text-xl">No seats are available for this bus.</div>;
   }
 
   const minutes = Math.floor(timeLeft / 60)

@@ -1,3 +1,5 @@
+import { SEAT_STATUS } from "../constants/seatStatus";
+
 export function mapApiSeats(seats) {
   return seats.map((s) => ({
     id: s.id,
@@ -5,15 +7,16 @@ export function mapApiSeats(seats) {
     deck: s.id.startsWith("U") ? "upper" : "lower",
     status:
       s.status === "AVAILABLE"
-        ? "available"
+        ? SEAT_STATUS.AVAILABLE
         : s.status === "SOLD"
-        ? "sold"
-        : "ladies",
+        ? SEAT_STATUS.SOLD
+        : SEAT_STATUS.AVAILABLE,
     originalStatus:
       s.status === "AVAILABLE"
-        ? "available"
+        ? SEAT_STATUS.AVAILABLE
         : s.status === "SOLD"
-        ? "sold"
-        : "ladies",
+        ? SEAT_STATUS.SOLD
+        : SEAT_STATUS.AVAILABLE,
+    ladiesOnly: s.status === "LADIES",
   }));
 }

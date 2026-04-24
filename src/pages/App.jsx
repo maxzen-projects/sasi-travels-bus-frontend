@@ -19,6 +19,7 @@ import ReferralHelpPage from "./pages/ReferralHelpPage";
 import ResellHelpPage from "./pages/ResellHelpPage";
 import OffersPage from "./pages/OffersPage";
 import Contact from "./pages/Contact";
+import { ROUTES } from "../constants/routes";
 
 export default function App() {
   return (
@@ -26,14 +27,14 @@ export default function App() {
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/results" element={<SearchResult />} />
-            <Route path="/select-seats" element={<SeatSelection />} />
-            <Route path="/boarding-dropping" element={<BoardingDropping />} />
-            <Route path="/passenger-details" element={<PassengerDetails />} />
-            <Route path="/payment" element={<PaymentPage />} />
-            <Route path="/my-bookings" element={<MyBookings />} />
-            <Route path="/profile" element={<ProfilePage />} />
+            <Route path={ROUTES.HOME} element={<Home />} />
+            <Route path={ROUTES.RESULTS} element={<SearchResult />} />
+            <Route path={ROUTES.SEAT} element={<SeatSelection />} />
+            <Route path={ROUTES.BOARDING_DROPPING} element={<BoardingDropping />} />
+            <Route path={ROUTES.PASSENGER_DETAILS} element={<PassengerDetails />} />
+            <Route path={ROUTES.PAYMENT} element={<PaymentPage />} />
+            <Route path={ROUTES.MY_BOOKINGS} element={<MyBookings />} />
+            <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
             <Route path="/help" element={<NeedHelpPage />} />
             <Route path="/faqs" element={<FAQPage />} />
             <Route path="/cancel-ticket-help" element={<CancelTicketHelpPage />} />

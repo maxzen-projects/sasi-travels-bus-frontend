@@ -1,13 +1,7 @@
-     import { useNavigate } from "react-router-dom";
-import { 
-  FaStar, 
-  FaCheckSquare, 
-  FaRegSquare, 
-  FaShareAlt, 
-  FaBus, 
-  FaMapMarkerAlt, 
-  FaListUl 
-} from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { FaStar } from "react-icons/fa";
+import BusActions from "./BusActions";
+import { ROUTES } from "../constants/routes";
 
 export default function BusCard({
   bus,
@@ -21,6 +15,12 @@ export default function BusCard({
   onViewDroppingPoints
 }) {
   const navigate = useNavigate();
+
+  const handleSeatNavigation = () => {
+    navigate(ROUTES.SEAT, {
+      state: { bus, from, to, date },
+    });
+  };
 
   const handleShare = async (e) => {
     e.stopPropagation();
@@ -97,11 +97,7 @@ export default function BusCard({
           </div>
 
           <button
-            onClick={() =>
-              navigate("/select-seats", {
-                state: { bus, from, to, date },
-              })
-            }
+            onClick={handleSeatNavigation}
             className="bg-[#0070FF] text-white px-4 py-2 rounded-full text-sm font-semibold"
           >
             Book Now
@@ -109,44 +105,15 @@ export default function BusCard({
 
         </div>
 
-        {/* MOBILE ACTION BUTTONS */}
-        <div className="grid grid-cols-5 gap-1 mt-6 pt-3 border-t text-[10px] font-medium">
-          <button 
-            onClick={onViewAmenities} 
-            className="flex flex-col items-center gap-1 text-[#0070FF]"
-          >
-            <FaListUl className="text-lg" />
-            <span>Amenities</span>
-          </button>
-          <button 
-            onClick={onViewBoardingPoints} 
-            className="flex flex-col items-center gap-1 text-[#0070FF]"
-          >
-            <FaBus className="text-lg" />
-            <span>Boarding</span>
-          </button>
-          <button 
-            onClick={onViewDroppingPoints} 
-            className="flex flex-col items-center gap-1 text-[#0070FF]"
-          >
-            <FaMapMarkerAlt className="text-lg" />
-            <span>Dropping</span>
-          </button>
-          <button 
-            onClick={onToggleCompare} 
-            className="flex flex-col items-center gap-1 text-gray-600"
-          >
-            {isCompareSelected ? <FaCheckSquare className="text-lg text-blue-600" /> : <FaRegSquare className="text-lg" />}
-            <span>Compare</span>
-          </button>
-          <button 
-            onClick={handleShare} 
-            className="flex flex-col items-center gap-1 text-gray-600"
-          >
-            <FaShareAlt className="text-lg" />
-            <span>Share</span>
-          </button>
-        </div>
+        <BusActions
+          variant="mobile"
+          isCompareSelected={isCompareSelected}
+          onToggleCompare={onToggleCompare}
+          onViewAmenities={onViewAmenities}
+          onViewBoardingPoints={onViewBoardingPoints}
+          onViewDroppingPoints={onViewDroppingPoints}
+          onShare={handleShare}
+        />
 
       </div>
 
@@ -211,73 +178,23 @@ export default function BusCard({
               <span className="text-xs text-gray-400">Overall</span>
             </div>
 
-            {/* <button
-              onClick={() =>
-                navigate("/select-seats", {
-                  state: { bus, from, to, date },
-                })
-              }
-              className="mt-3 bg-[#0070FF] hover:bg-[#0056CC] text-white px-6 py-2 border-2 rounded-lg text-sm font-semibold transition"
-            >
-              View Seats
-            </button> */}
-
           </div>
         </div>
 
         {/* BOTTOM LINKS (DESKTOP ONLY) */}
-        <div className="flex flex-wrap gap-8 mt-5 pt-3 px-6 border-t text-sm text-[#0070FF] font-medium">
-
-          <button onClick={onViewAmenities} className="flex items-center gap-1 hover:text-blue-800 transition-colors">
-            <FaListUl className="text-md" />
-            Amenities
-          </button>
-
-          <button onClick={onViewBoardingPoints} className="flex items-center gap-1 hover:text-blue-800 transition-colors">
-            <FaBus className="text-md" />
-            Boarding Points
-          </button>
-
-          <button onClick={onViewDroppingPoints} className="flex items-center gap-1 hover:text-blue-800 transition-colors">
-            <FaMapMarkerAlt className="text-md" />
-            Dropping Points
-          </button>
-
-          {/* <button>
-            Photos
-          </button>
-
-          <button>
-            Reviews & Ratings
-          </button>
-
-          <button>
-            Bus Routes
-          </button> */}
+        <div className="relative">
+          <BusActions
+            isCompareSelected={isCompareSelected}
+            onToggleCompare={onToggleCompare}
+            onViewAmenities={onViewAmenities}
+            onViewBoardingPoints={onViewBoardingPoints}
+            onViewDroppingPoints={onViewDroppingPoints}
+            onShare={handleShare}
+          />
 
           <button
-            onClick={onToggleCompare}
-            className=" flex items-center gap-1 text-gray-600 hover:text-gray-900"
-          >
-            {isCompareSelected ? <FaCheckSquare /> : <FaRegSquare />}
-            Compare
-          </button>
-
-          <button
-            onClick={handleShare}
-            className="flex items-center gap-1 text-gray-600 hover:text-blue-600"
-          >
-            <FaShareAlt />
-            Share
-          </button>
-
-          <button
-              onClick={() =>
-                navigate("/select-seats", {
-                  state: { bus, from, to, date },
-                })
-              }
-              className="ml-auto bg-[#0070FF] hover:bg-[#0056CC] text-white px-6 py-2 border-2 rounded-lg text-sm font-semibold transition"
+              onClick={handleSeatNavigation}
+              className="absolute right-5 top-1 bg-[#0070FF] hover:bg-[#0056CC] text-white px-6 py-2 border-2 rounded-lg text-sm font-semibold transition"
             >
               View Seats
             </button>

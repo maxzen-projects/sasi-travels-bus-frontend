@@ -4,7 +4,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import RouteFocusManager from "./utils/RouteFocusManager";
 import ErrorBoundary from "./components/ErrorBoundary";
-
+import Footer from "./components/Footer"
+import { ROUTES } from "./constants/routes";
 // Performance: Lazy load pages to code-split the application.
 // This reduces the initial bundle size.
 const Home = lazy(() => import("./pages/Home"));
@@ -27,6 +28,9 @@ const ResellHelpPage = lazy(() => import("./pages/ResellHelpPage"));
 const NeedHelpPage = lazy(() => import("./pages/NeedHelpPage"));
 const OffersPage = lazy(() => import("./pages/OffersPage"));
 const ReferralPage = lazy(() => import("./pages/ReferralPage"));
+const FAQSPage = lazy(() => import("./pages/FAQSSPage"));
+const Contact = lazy(() => import("./pages/Contact"));
+
 
 export default function App() {
   return (
@@ -38,23 +42,23 @@ export default function App() {
       <main>
         <Suspense fallback={<div>Loading page...</div>}>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path={ROUTES.HOME} element={<Home />} />
             <Route
-              path="/results"
+              path={ROUTES.RESULTS}
               element={
                 <ErrorBoundary>
                   <SearchResult />
                 </ErrorBoundary>
               }
             />
-            <Route path="/select-seats" element={<SeatSelection />} />
-            <Route path="/boarding-dropping" element={<BoardingDropping />} />
-            <Route path="/passenger-details" element={<PassengerDetails />} />
-            <Route path="/payment" element={<PaymentPage />} />
-            <Route path="/offers" element={<Offers />} />
-            <Route path="/my-bookings" element={<MyBookings />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/faqs" element={<FAQPage />} />
+            <Route path={ROUTES.SEAT} element={<SeatSelection />} />
+            <Route path={ROUTES.BOARDING_DROPPING} element={<BoardingDropping />} />
+            <Route path={ROUTES.PASSENGER_DETAILS} element={<PassengerDetails />} />
+            <Route path={ROUTES.PAYMENT} element={<PaymentPage />} />
+            <Route path={ROUTES.OFFERS} element={<Offers />} />
+            <Route path={ROUTES.MY_BOOKINGS} element={<MyBookings />} />
+            <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
+            <Route path={ROUTES.FAQS} element={<FAQPage />} />
             <Route path="/wallet" element={<WalletHelpPage />} />
             <Route path="/offers-discounts" element={<OffersDiscountPage />} />
             <Route path="/referral-help" element={<ReferralHelpPage />} />
@@ -63,12 +67,15 @@ export default function App() {
             <Route path="/help" element={<NeedHelpPage />} />
             <Route path="/resell-help" element={<ResellHelpPage />} />
             <Route path="/refer" element={<ReferralPage />} />
-
+            <Route path="/faqspage" element={<FAQSPage />} />
             <Route path="/offerss" element={<OffersPage />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path={ROUTES.LOGIN} element={<Login />} />
           </Routes>
         </Suspense>
+        
       </main>
+      <Footer/>
     </BrowserRouter>
   );
 }
